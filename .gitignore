@@ -1,0 +1,24 @@
+# Dependency directories (Thư mục cài đặt thư viện)
+node_modules/
+jspm_packages/
+
+# Local env files (Các file chứa biến môi trường)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs (Tùy chọn: loại bỏ file cấu hình của VS Code, WebStorm)
+.vscode/
+.idea/
+
+# Build folders
+dist/
+build/
+.next/
