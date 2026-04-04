@@ -1,0 +1,85 @@
+// ============================================================
+// APPLICATION LAYER - AdjustStockUseCase.ts
+// Nhiệm vụ: "Đầu não" điều phối toàn bộ luồng Cân bằng kho.
+//   1. Nhận DTO từ UI
+//   2. Validate dữ liệu qua DTO validator
+//   3. Với mỗi item: tự tính lại diff_quantity và diff_value (KHÔNG tin UI tính)
+//   4. Gọi InventoryRepository để cập nhật product stock và inventory_check_items
+//   5. Gọi InventoryRepository để cập nhật tổng hợp phiếu kiểm (tổng tăng/giảm)
+//   6. Cập nhật trạng thái phiếu thành "Đã cân bằng"
+// KHÔNG render UI, KHÔNG gọi Supabase trực tiếp (qua Repository).
+// ============================================================
+
+import { InventoryRepository } from '../../infrastructure/repositories/InventoryRepository';
+import {
+  AdjustStockInputDTO,
+  InventoryCheckItemDTO,
+  validateAdjustStockInput,
+} from '../dtos/InventoryInput.dto';
+
+export interface AdjustStockResult {
+  success: boolean;
+  totalIncrease: number;
+  totalDecrease: number;
+  totalDiffValue: number;
+  error?: string;
+}
+
+export class AdjustStockUseCase {
+  private inventoryRepo: InventoryRepository;
+
+  constructor() {
+    this.inventoryRepo = new InventoryRepository();
+  }
+
+  async execute(input: AdjustStockInputDTO): Promise<AdjustStockResult> {
+    // Bước 1: Validate đầu vào
+    const validationError = validateAdjustStockInput(input);
+    if (validationError) {
+      return { success: false, totalIncrease: 0, totalDecrease: 0, totalDiffValue: 0, error: validationError };
+    }
+
+    // Bước 2: UseCase tự tính lại các con số (không tin UI tính)
+    // Đây là logic kinh doanh - chỉ có UseCase mới được tính
+    const recalculatedItems = input.items.map((item) => {
+      const diff_quantity = item.actual_quantity - item.stock_quantity;
+      const diff_value = diff_quantity * item.sell_price;
+      return { ...item, diff_quantity, diff_value };
+    });
+
+    // Bước 3: Tổng hợp các chỉ số chênh lệch
+    let totalIncrease = 0;
+    let totalDecrease = 0;
+    let totalDiffValue = 0;
+
+    recalculatedItems.forEach((item) => {
+      if (item.diff_quantity > 0) totalIncrease += item.diff_quantity;
+      else if (item.diff_quantity < 0) totalDecrease += Math.abs(item.diff_quantity);
+      totalDiffValue += item.diff_value;
+    });
+
+    // Bước 4: Gọi Repository để thực thi (giao cho Infrastructure xử lý DB)
+    try {
+      // 4a. Cập nhật từng sản phẩm trong bảng products và inventory_check_items
+      await this.inventoryRepo.balanceItems(recalculatedItems);
+
+      // 4b. Cập nhật tổng hợp và trạng thái phiếu kiểm kho
+      await this.inventoryRepo.completeCheck(input.inventory_check_id, {
+        balanced_by: input.balanced_by,
+        total_increase: totalIncrease,
+        total_decrease: totalDecrease,
+      });
+
+      return { success: true, totalIncrease, totalDecrease, totalDiffValue };
+    } catch (error: any) {
+      console.error('[AdjustStockUseCase] Lỗi cân bằng kho:', error);
+      return {
+        success: false,
+        totalIncrease: 0,
+        totalDecrease: 0,
+        totalDiffValue: 0,
+        error: error.message || 'Lỗi không xác định khi cân bằng kho',
+      };
+    }
+  }
+} 
