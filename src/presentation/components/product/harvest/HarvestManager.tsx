@@ -7,10 +7,11 @@
 //   - Hiển thị thông báo thành công/thất bại
 // KHÔNG tự cộng stock, KHÔNG gọi Supabase trực tiếp.
 // ============================================================
+'use client'
 
 import React, { useState, useEffect } from 'react';
-import { HarvestRepository } from '../../infrastructure/repositories/HarvestRepository';
-import { RecordHarvestUseCase } from '../../application/use-cases/RecordHarvestUseCase';
+import { HarvestRepository } from '@/infrastructure/supabase/repositories/HarvestRepository'
+import { RecordHarvestUseCase } from '@/application/use-cases/harvest/RecordHarvestUseCase';
 
 const harvestRepo = new HarvestRepository();
 const recordHarvestUseCase = new RecordHarvestUseCase();

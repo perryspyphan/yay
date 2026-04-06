@@ -1,19 +1,12 @@
+'use client'
+
 // ============================================================
 // PRESENTATION LAYER - InventoryCheckList.tsx
-// Nhiệm vụ: Hiển thị danh sách phiếu kiểm kho.
-//   - Render bảng danh sách với filter sidebar
-//   - Cho phép mở rộng hàng để xem chi tiết nhanh
-//   - Tính toán hiển thị số lệch (chỉ để HIỂN THỊ, không lưu)
-//   - Gọi InventoryRepository để lấy dữ liệu (KHÔNG gọi UseCase ở đây)
-//   - Nút "Cân bằng kho" dẫn sang InventoryCheckForm
-// KHÔNG chứa business logic, KHÔNG tính diff thực sự (UseCase làm).
-// ============================================================
+// ...
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { InventoryCheck, InventoryItem, InventoryFilter, InventoryStatus } from '../../domain/Inventory';
-import { InventoryRepository } from '../../infrastructure/repositories/InventoryRepository';
-
-const repo = new InventoryRepository();
+import { InventoryCheck, InventoryItem, InventoryFilter, InventoryStatus } from '@/domain/entities/Inventory';
+import { InventoryRepository } from '@/infrastructure/supabase/repositories/InventoryRepository';
 
 // ─── Status Badge ──────────────────────────────────────────
 const StatusBadge: React.FC<{ status: InventoryStatus }> = ({ status }) => {
@@ -40,6 +33,8 @@ const StatusBadge: React.FC<{ status: InventoryStatus }> = ({ status }) => {
 };
 
 // ─── Expanded Detail Row ──────────────────────────────────
+const repo = new InventoryRepository();
+
 const ExpandedDetail: React.FC<{
   check: InventoryCheck;
   onCancel: (id: string) => void;

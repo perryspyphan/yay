@@ -1,7 +1,7 @@
 // src/app/(admin)/hang-hoa/page.tsx
 import { Suspense } from 'react'
 import { getProductsUseCase } from '@/application/use-cases/product/ProductUseCases'
-import ProductTable from '@/presentation/components/product/ProductTable'
+import ProductTable from '@/presentation/components/product/catalog/ProductTable'
 
 export const dynamic = 'force-dynamic'
 

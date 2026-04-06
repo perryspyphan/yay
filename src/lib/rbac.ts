@@ -34,8 +34,10 @@ export const ROUTE_PERMISSIONS: { path: string; roles: Role[] }[] = [
   // Giao dịch KH + Hàng hóa + Dashboard: tất cả
   { path: '/giao-dich/dat-hang/khach-hang',  roles: ['admin', 'manager', 'staff'] },
   { path: '/giao-dich/hoa-don/khach-hang',   roles: ['admin', 'manager', 'staff'] },
-  { path: '/hang-hoa',    roles: ['admin', 'manager', 'staff'] },
-  { path: '/dashboard',   roles: ['admin', 'manager', 'staff'] },
+  { path: '/hang-hoa',            roles: ['admin', 'manager', 'staff'] },
+  { path: '/hang-hoa/kiem-kho',   roles: ['admin', 'manager', 'staff'] },
+  { path: '/hang-hoa/thu-hoach',  roles: ['admin', 'manager', 'staff'] },
+  { path: '/dashboard',           roles: ['admin', 'manager', 'staff'] },
 ]
 
 // ── 2. KIỂM TRA QUYỀN TRUY CẬP ROUTE ───────────────────────
@@ -85,6 +87,11 @@ export const NAV_ITEMS: NavItem[] = [
   {
     label: 'Hàng hóa',
     href:  '/hang-hoa',
+    children: [
+      { label: 'Danh sách hàng hóa', href: '/hang-hoa' },
+      { label: 'Kiểm kho',           href: '/hang-hoa/kiem-kho' },
+      { label: 'Thu hoạch',          href: '/hang-hoa/thu-hoach' },
+    ],
   },
   {
     label: 'Giao dịch',

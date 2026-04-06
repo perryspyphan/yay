@@ -4,12 +4,12 @@
 //   - Hiển thị danh sách bản ghi thu hoạch với filter thời gian
 //   - Hiển thị tổng hợp năng suất theo sản phẩm
 //   - Gọi HarvestRepository để lấy dữ liệu (KHÔNG qua UseCase vì đây là READ)
-// KHÔNG ghi dữ liệu, KHÔNG chứa business logic.
-// ============================================================
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Harvest, HarvestStats } from '../../domain/Harvest';
-import { HarvestRepository } from '../../infrastructure/repositories/HarvestRepository';
+'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'; 
+import { Harvest, HarvestStats } from '@/domain/entities/Harvest';
+import { HarvestRepository } from '@/infrastructure/supabase/repositories/HarvestRepository';
 
 const repo = new HarvestRepository();
 
