@@ -10,8 +10,6 @@ import { ReactNode } from "react";
 export type InventoryStatus = 'Phiếu tạm' | 'Đã cân bằng' | 'Đã hủy';
 
 export interface InventoryCheck {
-  increase_qty: ReactNode;
-  item_count: ReactNode;
   id: string;
   code: string;
   creator: string;
@@ -20,11 +18,12 @@ export interface InventoryCheck {
   notes?: string;
   balanced_by?: string;
   balanced_at?: string;
-  total_items: number;
-  total_increase: number;
-  total_decrease: number;
+  total_items: number;      // dùng cái này
+  total_increase: number;   // dùng cái này
+  total_decrease: number;   // dùng cái này
   created_at: string;
   updated_at: string;
+  // XÓA: increase_qty, item_count (không tồn tại trong DB)
 }
 
 export interface InventoryItem {
