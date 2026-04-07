@@ -1,5 +1,7 @@
 // src/application/dto/CashbookDTO.ts
 
+// src/application/dto/CashbookDTO.ts
+
 import type { CashbookKieu, CashbookNhomDoiTuong } from '@/domain/entities/Cashbook'
 
 export interface LapPhieuDTO {
@@ -33,7 +35,7 @@ export interface ThemTaiKhoanDTO {
   so_tai_khoan: string | null
   ngan_hang: string | null
   chu_tai_khoan: string | null
-  loai: 'ngan_hang' | 'vi_dien_tu'
+  loai: 'tien_mat' | 'ngan_hang' | 'vi_dien_tu'
   la_mac_dinh: boolean
   so_du_dau_ky: number
   ghi_chu: string | null
